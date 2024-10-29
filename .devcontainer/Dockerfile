@@ -9,6 +9,7 @@ RUN apt update && \
         build-essential \
         cmake \
         git \
+        mesa-utils \
         curl lsb-release gnupg \
         libbullet-dev \
         python3-colcon-common-extensions \
