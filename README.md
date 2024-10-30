@@ -48,6 +48,12 @@ Należy pamiętać, aby po zbudowaniu wywołać komendę lub pracować w nowym t
 1. Zbuduj obszar roboczy wraz z simple_example package.  
 2. Uruchom launcha `example.launch.py`, pokazujący, w jaki sposób należy połączyć Gazebo z ROS 2, aby możliwa była wzajemna komunikacja.
 
+## Przymusowe uruchomienie na GPU
+
+W repozytorium znajduje się plik 'gpu_run.sh'. Jest to prosty skrypt, który forsuje uruchomienie programu na GPU. Przykład użycia:
+```bash
+./gpu_run.sh gz sim # uruchamia gz sim na GPU
+```
 
 ## Dodatkowe materiały
 * [Getting Started](getting_started.md)
