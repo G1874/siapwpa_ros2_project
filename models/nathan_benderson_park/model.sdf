@@ -255,7 +255,7 @@
                 <geometry>
                     <heightmap>
                         <uri>materials/textures/Heightmap.png</uri>
-                        <size>1724.5 3449 7</size>
+                        <size>1724.5 3449 4.57</size>
                         <pos>0 0 -2.548</pos>
                     </heightmap>
                 </geometry>
