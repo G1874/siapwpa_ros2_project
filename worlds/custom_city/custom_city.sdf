@@ -32,8 +32,8 @@
     <gui fullscreen="0">
     </gui>
 
-    <!-- World model -->
-    <model name="ground_plane">
+    <!-- Ground plane for testing -->
+    <!-- <model name="ground_plane">
       <static>true</static>
       <link name="link">
         <collision name="collision">
@@ -57,21 +57,20 @@
         </material>
         </visual>
       </link>
-    </model>
-    <!-- <include>
+    </model> -->
+
+    <!-- World model -->
+    <include>
       <uri>
       model://nathan_benderson_park
       </uri>
-    </include> -->
+    </include>
 
     <!-- Vehicle model -->
     <include>
-      <uri>https://fuel.ignitionrobotics.org/1.0/openrobotics/models/Prius Hybrid with sensors</uri>
-    </include>
-    <!-- <include>
       <pose>-132 1100 10 0 0 0</pose>
       <uri>https://fuel.ignitionrobotics.org/1.0/openrobotics/models/Prius Hybrid with sensors</uri>
-    </include> -->
+    </include>
 
   </world>
 </sdf>
