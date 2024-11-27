@@ -69,7 +69,7 @@
     <!-- Vehicle model -->
     <include>
       <pose>-132 1100 10 0 0 0</pose>
-      <uri>https://fuel.ignitionrobotics.org/1.0/openrobotics/models/Prius Hybrid with sensors</uri>
+      <uri>model://Prius_sensors</uri>
     </include>
 
   </world>
