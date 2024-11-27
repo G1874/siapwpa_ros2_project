@@ -1,0 +1,89 @@
+### Template ###
+# - ros_topic_name: "ros_chatter"
+#   gz_topic_name: "gz_chatter"
+#   ros_type_name: "std_msgs/msg/String"
+#   gz_type_name: "ignition.msgs.StringMsg"
+#   subscriber_queue: 5
+#   publisher_queue: 6
+#   lazy: true
+#   direction: ROS_TO_GZ
+
+# - ros_topic_name: "ros_chatter"
+#   gz_topic_name: "gz_chatter"
+#   ros_type_name: "std_msgs/msg/String"
+#   gz_type_name: "ignition.msgs.StringMsg"
+#   subscriber_queue: 10
+#   publisher_queue: 20
+#   lazy: false
+#   direction: GZ_TO_ROS
+### Template ###
+
+### Laser sensor ###
+- ros_topic_name: "center_laser_sensor/scan"
+  gz_topic_name: "/world/custom_city/model/prius_hybrid_sensors/link/sensors/sensor/center_laser_sensor/scan"
+  ros_type_name: "sensor_msgs/msg/LaserScan"
+  gz_type_name: "gz.msgs.LaserScan"
+  direction: GZ_TO_ROS
+
+- ros_topic_name: "center_laser_sensor/scan_points"
+  gz_topic_name: "/world/custom_city/model/prius_hybrid_sensors/link/sensors/sensor/center_laser_sensor/scan/points"
+  ros_type_name: "sensor_msgs/msg/PointCloud2"
+  gz_type_name: "gz.msgs.PointCloudPacked"
+  direction: GZ_TO_ROS
+### Laser sensor ###
+
+### Front camera ###
+- ros_topic_name: "front_camera_sensor/camera_info"
+  gz_topic_name: "/world/custom_city/model/prius_hybrid_sensors/link/sensors/sensor/front_camera_sensor/camera_info"
+  ros_type_name: "sensor_msgs/msg/CameraInfo"
+  gz_type_name: "gz.msgs.CameraInfo"
+  direction: GZ_TO_ROS
+
+- ros_topic_name: "front_camera_sensor/image"
+  gz_topic_name: "/world/custom_city/model/prius_hybrid_sensors/link/sensors/sensor/front_camera_sensor/image"
+  ros_type_name: "sensor_msgs/msg/Image"
+  gz_type_name: "gz.msgs.Image"
+  direction: GZ_TO_ROS
+### Front camera ###
+
+### Back camera ###
+- ros_topic_name: "back_camera_sensor/camera_info"
+  gz_topic_name: "/world/custom_city/model/prius_hybrid_sensors/link/sensors/sensor/back_camera_sensor/camera_info"
+  ros_type_name: "sensor_msgs/msg/CameraInfo"
+  gz_type_name: "gz.msgs.CameraInfo"
+  direction: GZ_TO_ROS
+
+- ros_topic_name: "back_camera_sensor/image"
+  gz_topic_name: "/world/custom_city/model/prius_hybrid_sensors/link/sensors/sensor/back_camera_sensor/image"
+  ros_type_name: "sensor_msgs/msg/Image"
+  gz_type_name: "gz.msgs.Image"
+  direction: GZ_TO_ROS
+### Back camera ###
+
+### Right camera ###
+- ros_topic_name: "right_camera_sensor/camera_info"
+  gz_topic_name: "/world/custom_city/model/prius_hybrid_sensors/link/sensors/sensor/right_camera_sensor/camera_info"
+  ros_type_name: "sensor_msgs/msg/CameraInfo"
+  gz_type_name: "gz.msgs.CameraInfo"
+  direction: GZ_TO_ROS
+
+- ros_topic_name: "right_camera_sensor/image"
+  gz_topic_name: "/world/custom_city/model/prius_hybrid_sensors/link/sensors/sensor/right_camera_sensor/image"
+  ros_type_name: "sensor_msgs/msg/Image"
+  gz_type_name: "gz.msgs.Image"
+  direction: GZ_TO_ROS
+### Right camera ###
+
+### Left camera ###
+- ros_topic_name: "left_camera_sensor/camera_info"
+  gz_topic_name: "/world/custom_city/model/prius_hybrid_sensors/link/sensors/sensor/left_camera_sensor/camera_info"
+  ros_type_name: "sensor_msgs/msg/CameraInfo"
+  gz_type_name: "gz.msgs.CameraInfo"
+  direction: GZ_TO_ROS
+
+- ros_topic_name: "left_camera_sensor/image"
+  gz_topic_name: "/world/custom_city/model/prius_hybrid_sensors/link/sensors/sensor/left_camera_sensor/image"
+  ros_type_name: "sensor_msgs/msg/Image"
+  gz_type_name: "gz.msgs.Image"
+  direction: GZ_TO_ROS
+### Left camera ###
