@@ -1,0 +1,24 @@
+<?xml version="1.0" ?>
+<sdf version="1.5">
+  <model name="Turn Left">
+    <static>true</static>
+    <link name="link">
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <scale>10 10 10</scale>
+            <uri>model://models/Signs/Turn_Left_sign/meshes/turn_left_sign.dae</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <scale>10 10 10</scale>
+            <uri>model://models/Signs/Turn_Left_sign/meshes/turn_left_sign.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+  </model>
+</sdf>
