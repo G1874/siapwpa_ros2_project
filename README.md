@@ -25,3 +25,4 @@ prius_hybrid_sensors/sensors/center_laser_sensor
 
 ### Potencjalnie przydatne źródła:
 - [ROS2-Self-Driving-Car-AI-using-OpenCV](https://github.com/noshluk2/ROS2-Self-Driving-Car-AI-using-OpenCV/tree/main/self_driving_car_pkg/worlds)
+- [r2s: interfejs CLI](https://github.com/mjcarroll/r2s)
