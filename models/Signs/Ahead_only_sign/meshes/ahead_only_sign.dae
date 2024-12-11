@@ -116,22 +116,22 @@
         <technique sid="common">
           <phong>
             <emission>
-              <color>.1 .1 .1 1</color>
+              <color>0 0 0 1</color>
             </emission>
             <ambient>
-              <color>0.1 0.1 0.1 1</color>
+              <color>0 0 0 1</color>
             </ambient>
             <diffuse>
               <texture texture="Speed_30_tga-sampler" texcoord="CHANNEL1"/>
             </diffuse>
             <specular>
-              <color>0.9 0.9 0.9 1</color>
+              <color>1 1 1 1</color>
             </specular>
             <shininess>
               <float>10</float>
             </shininess>
             <reflective>
-              <color>0 0 0 1</color>
+              <color>1 1 1 1</color>
             </reflective>
             <transparent opaque="A_ONE">
               <color>1 1 1 1</color>
