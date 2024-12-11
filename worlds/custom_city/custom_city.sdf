@@ -72,42 +72,175 @@
       <uri>model://models/Prius</uri>
     </include>
     <!--Signs Models-->
-  <include>
-    <pose>-116 953 4.5 0 0 0</pose>
-    <uri>model://models/Signs/Stop_sign</uri>
-  </include>
-  <include>
-    <pose>-116 943 4.5 0 0 0</pose>
-    <uri>model://models/Signs/Ahead_only_sign</uri>
-  </include>
-  <include>
-    <pose>-116 933 4.5 0 0 0</pose>
-    <uri>model://models/Signs/Pedestrian_Crossing_sign</uri>
-  </include>
-  <include>
-    <pose>-116 923 4.5 0 0 0</pose>
-    <uri>model://models/Signs/Priority_sign</uri>
-  </include>
-  <include>
-    <pose>-116 913 4.5 0 0 0</pose>
-    <uri>model://models/Signs/Speed_limit_sign_30</uri>
-  </include>
-  <include>
-    <pose>-116 893 4.5 0 0 0</pose>
-    <uri>model://models/Signs/Speed_limit_sign_50</uri>
-  </include>
-  <include>
-    <pose>-116 883 4.5 0 0 0</pose>
-    <uri>model://models/Signs/Speed_limit_sign_70</uri>
-  </include>
-  <include>
-    <pose>-116 873 4.5 0 0 0</pose>
-    <uri>model://models/Signs/Turn_Left_sign</uri>
-  </include>
-  <include>
-    <pose>-116 863 4.5 0 0 0</pose>
-    <uri>model://models/Signs/Turn_Right_sign</uri>
-  </include>
-
+    <include>
+      <uri>model://models/Signs/Priority_sign</uri>
+      <name>Priority Sign</name>
+      <pose>-134.9530029296875 973.00592041015625 5 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://models/Signs/Speed_limit_sign_50</uri>
+      <name>Speed limit 50</name>
+      <pose>-126.07900238037109 921.565185546875 5 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://models/Signs/Speed_limit_sign_30</uri>
+      <name>Speed limit 30</name>
+      <pose>-136.27400207519531 990.6632080078125 5 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://models/Signs/Pedestrian_Crossing_sign</uri>
+      <name>Pedestrian Crossing</name>
+      <pose>-126.265 934.13599999999997 5 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://models/Signs/Give_way_sign</uri>
+      <name>Give way</name>
+      <pose>-115.89192199707031 953.05523681640625 5 0 0 3.1399999999975172</pose>
+    </include>
+    <include>
+      <uri>model://models/Signs/Ahead_only_sign</uri>
+      <name>Ahead_only</name>
+      <pose>-21.958778381347656 953.3294677734375 5 0 0 1.5700000042340219</pose>
+    </include>
+    <include>
+      <uri>model://models/Signs/Turn_Right_sign</uri>
+      <name>Turn Right</name>
+      <pose>-115.89810943603516 953.17010498046875 5.7992801666259766 0 0 3.1399999999975172</pose>
+    </include>
+    <include>
+      <uri>model://models/Signs/Turn_Left_sign</uri>
+      <name>Turn Left</name>
+      <pose>-14.958754539489746 1117.484130859375 5 0 0 3.1399999999975172</pose>
+    </include>
+    <include>
+      <uri>model://models/Signs/Speed_limit_sign_70</uri>
+      <name>Speed limit 70</name>
+      <pose>-135.56199645996094 1076.6138916015625 5 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://models/Signs/Ahead_only_sign</uri>
+      <name>Ahead_only_0</name>
+      <pose>-107.56069946289062 963.59075927734375 4.5 0 0 -1.5700000042340219</pose>
+    </include>
+    <include>
+      <uri>model://models/Signs/Speed_limit_sign_30</uri>
+      <name>Speed limit 30_0</name>
+      <pose>-101.80255889892578 964.47357177734375 4.3869600296020508 0 0 -1.4986599274514822</pose>
+    </include>
+    <include>
+      <uri>model://models/Signs/Speed_limit_sign_30</uri>
+      <name>Speed limit 30_1</name>
+      <pose>-58.477100372314453 939.40399169921875 4.2476701736450195 0 0 3.0885321227207432</pose>
+    </include>
+    <include>
+      <uri>model://models/Signs/Speed_limit_sign_30</uri>
+      <name>Speed limit 30_2</name>
+      <pose>-126.91799926757812 714.0999755859375 4.0898399353027344 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://models/Signs/Speed_limit_sign_30</uri>
+      <name>Speed limit 30_3</name>
+      <pose>-107.72100067138672 704.8060302734375 4.3104000091552734 0 0 -1.6041868653478144</pose>
+    </include>
+    <include>
+      <uri>model://models/Signs/Speed_limit_sign_30</uri>
+      <name>Speed limit 30_4</name>
+      <pose>-68.876502990722656 720.794189453125 4.3820400238037109 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://models/Signs/Speed_limit_sign_30</uri>
+      <name>Speed limit 30_5</name>
+      <pose>-77.933097839355469 692.43798828125 4.5 0 0 1.5038014977585488</pose>
+    </include>
+    <include>
+      <uri>model://models/Signs/Speed_limit_sign_50</uri>
+      <name>Speed limit 50_0</name>
+      <pose>-75.254684448242188 703.92010498046875 4.5 0 0 -1.6202100202990899</pose>
+    </include>
+    <include>
+      <uri>model://models/Signs/Speed_limit_sign_50</uri>
+      <name>Speed limit 50_1</name>
+      <pose>-111.59300231933594 693.3079833984375 4.5 0 0 1.2679632761766444</pose>
+    </include>
+    <include>
+      <uri>model://models/Signs/Speed_limit_sign_50</uri>
+      <name>Speed limit 50_2</name>
+      <pose>-58.43 710.16 4.5 0 0 3.09</pose>
+    </include>
+    <include>
+      <uri>model://models/Signs/Give_way_sign</uri>
+      <name>Give_way_sign2</name>
+      <pose>-58.43 951.77 4.5 0 0 3.09</pose>
+    </include>
+    <include>
+      <uri>model://models/Signs/Priority_sign</uri>
+      <name>Priority_sign2</name>
+      <pose>-70.43 953.77 4.5 0 0 1.57</pose>
+    </include>
+    <include>
+      <uri>model://models/Signs/Priority_sign</uri>
+      <name>Priority_sign3</name>
+      <pose>55 950.77 4.5 0 0 1.57</pose>
+    </include>
+    <include>
+      <uri>model://models/Signs/Speed_limit_sign_50</uri>
+      <name>Speed limit 50_3</name>
+      <pose>-45.43 953.77 4.5 0 0 1.57</pose>
+    </include>
+    <include>
+      <uri>model://models/Signs/Speed_limit_sign_70</uri>
+      <name>Speed limit 70_3</name>
+      <pose>61 933.77 4.5 0 0 0.1</pose>
+    </include>
+    <include>
+      <uri>model://models/Signs/Pedestrian_Crossing_sign</uri>
+      <name>Pedestrian Crossing2</name>
+      <pose>50 824.13599999999997 5 0 0 1.07</pose>
+    </include>
+    <include>
+      <uri>model://models/Signs/Speed_limit_sign_30</uri>
+      <name>Speed limit 30_6</name>
+      <pose>50 824.13599999999997 5.8 0 0 1.07</pose>
+    </include>
+    <include>
+      <uri>model://models/Signs/Speed_limit_sign_70</uri>
+      <name>Speed limit 70_4</name>
+      <pose>113 802.77 4.5 0 0 1.47</pose>
+    </include>
+    <include>
+      <uri>model://models/Signs/Turn_Right_sign</uri>
+      <name>Turn Right2</name>
+      <pose>-45.89810943603516 1117.17010498046875 5.01666259766 0 0 1.57</pose>
+    </include>
+    <include>
+      <uri>model://models/Signs/Turn_Right_sign</uri>
+      <name>Turn Right3</name>
+      <pose>-18.89810943603516 971.17010498046875 5.01666259766 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://models/Signs/Give_way_sign</uri>
+      <name>Give_way_sign3</name>
+      <pose>12 1017.77 4.5 0 0 2.25</pose>
+    </include>
+    <include>
+      <uri>model://models/Signs/Give_way_sign</uri>
+      <name>Give_way_sign4</name>
+      <pose>70 950 4.5 0 0 3.14</pose>
+    </include>
+    <include>
+      <uri>model://models/Signs/Speed_limit_sign_30</uri>
+      <name>Speed limit 30_7</name>
+      <pose>70.89810943603516 986.17010498046875 5.01666259766 0 0 1.17</pose>
+    </include>
+    <include>
+      <uri>model://models/Signs/Speed_limit_sign_70</uri>
+      <name>Speed limit 70_5</name>
+      <pose>-124 975.77 4.5 0 0 3.14</pose>
+    </include>
+    <include>
+      <uri>model://models/Signs/Speed_limit_sign_30</uri>
+      <name>Speed limit 30_8</name>
+      <pose>-124 1103.77 4.5 0 0 3.14</pose>
+    </include>
   </world>
 </sdf>
