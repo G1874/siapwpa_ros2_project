@@ -62,15 +62,16 @@
     <!-- World model -->
     <include>
       <uri>
-      model://models/nathan_benderson_park
+      model://nathan_benderson_park
       </uri>
     </include>
 
     <!-- Vehicle model -->
     <include>
       <pose>-132 1100 10 0 0 0</pose>
-      <uri>model://models/Prius</uri>
+      <uri>model://Prius_sensors</uri>
     </include>
+
     <!--Signs Models-->
     <include>
       <uri>model://models/Signs/Priority_sign</uri>
