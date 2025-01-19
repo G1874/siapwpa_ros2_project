@@ -9,17 +9,21 @@ PI=3.14159265359
 class SliderControlNode(Node):
     def __init__(self):
         super().__init__('slider_control_node')
-        self.bin_thresh = 80.0
-        self.area_max = 11000.0
+        self.bin_thresh = 55.0
+        self.area_max = 5000.0
         self.area_min = 20
-        self.hood_cutoff = 3.5
+        self.hood_cutoff = 0.01
+        self.left_cutoff = 0.18
+        self.right_cutoff = 0.43
         self.pub = self.create_publisher(Float32MultiArray, '/binarization_slider_values', 10)
         plt.subplots_adjust(left=0.1, bottom=0.1, top=0.9, right=0.9)
 
         self.slider_bin_thresh = self.create_slider('bin_thresh', 0.0, 255.0, self.bin_thresh, 1.0, 0.85)
         self.slider_area_max = self.create_slider('max_area', 0.0, 30000.0, self.area_max, 1.0, 0.75)
         self.slider_area_min = self.create_slider('min_area', 0.0, 30000.0, self.area_min, 1.0, 0.65)
-        self.slider_focal = self.create_slider('hood_cutoff', 1.0, 10.0, self.hood_cutoff, 0.1, 0.55)
+        self.slider_hc = self.create_slider('hood_cutoff', 0.01, 1.0, self.hood_cutoff, 0.01, 0.55)
+        self.slider_lc = self.create_slider('left_cutoff', 0.01, 1.0, self.left_cutoff, 0.01, 0.45)
+        self.slider_rc = self.create_slider('right_cutoff', 0.01, 1.0, self.right_cutoff, 0.01, 0.35)
 
         self.get_logger().info("Slider control node initialized.")
         self.slider_update(0)
@@ -34,14 +38,16 @@ class SliderControlNode(Node):
         self.bin_thresh = int(self.slider_bin_thresh.val)
         self.area_max = int(self.slider_area_max.val)
         self.area_min = int(self.slider_area_min.val)
-        self.hood_cutoff = int(self.slider_focal.val)
+        self.hood_cutoff = self.slider_hc.val
+        self.left_cutoff = self.slider_lc.val
+        self.right_cutoff = self.slider_rc.val
 
-        self.get_logger().info(f"Updated values: bin_thresh={self.bin_thresh}, area_max={self.area_max}, area_min={self.area_min}, hood_cutoff={self.hood_cutoff}") 
+        # self.get_logger().info(f"Updated values: bin_thresh={self.bin_thresh}, area_max={self.area_max}, area_min={self.area_min}, hood_cutoff={self.hood_cutoff}") 
 
         msg = Float32MultiArray()
-        msg.data = list(map(float, [self.bin_thresh, self.area_max, self.area_min, self.hood_cutoff]))
+        msg.data = list(map(float, [self.bin_thresh, self.area_max, self.area_min, self.hood_cutoff, self.left_cutoff, self.right_cutoff]))
         self.pub.publish(msg)
-        self.get_logger().info("Published updated values to topic.")
+        # self.get_logger().info("Published updated values to topic.")
 
     def spin(self):
         while rclpy.ok():
