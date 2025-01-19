@@ -26,6 +26,9 @@ class MotionControl(Node):
         timer_2_period = 2      # Get new trajectory.
 
         self.cmd_vel_msg = Twist()
+        
+        self.road_pts = None
+        self.coord_transform = None
 
         # Timers
         self.timer_1 = self.create_timer(timer_1_period, self.timer_1_callback)
@@ -34,8 +37,11 @@ class MotionControl(Node):
         # Subscribers and publishers
         self.cmd_vel_pub = self.create_publisher(Twist, 'cmd_vel', 10)
         self.coord_transform_sub = self.create_subscription(Float32MultiArray,
-                                                            self.coord_transform_topic, 10)
-        self.road_pts_sub = self.create_subscription(Float32MultiArray, self.road_pts_topic, 10)
+                                                            self.coord_transform_topic,
+                                                            self.coord_transform_callback, 10)
+        self.road_pts_sub = self.create_subscription(Float32MultiArray,
+                                                     self.road_pts_topic,
+                                                     self.road_pts_callback, 10)
 
         def timer_1_callback(self):
             pass
@@ -49,7 +55,14 @@ class MotionControl(Node):
 
             self.publisher_.cmd_vel_pub(self.cmd_vel_msg)
 
-        def motion_controller(self, waypoints):
+        def coord_transform_callback(self, msg):
+            if type(self.coord_transform) == None:  # Read it only once.
+                self.coord_transform = msg.data
+            
+        def road_pts_callback(self, msg):
+            pass
+
+        def motion_controller(self, x, y, v):
             pass
 
 
