@@ -4,7 +4,6 @@ from launch_ros.actions import Node
 
 
 def generate_launch_description():
-    # world_path = "/home/developer/ros2_ws/src/worlds/custom_city/custom_city.sdf"
     world_path = "/home/developer/ros2_ws/src/worlds/custom_city/custom_city.sdf"
     gz_bridge_path = "/home/developer/ros2_ws/src/ros_gz_bridge.yaml"
 

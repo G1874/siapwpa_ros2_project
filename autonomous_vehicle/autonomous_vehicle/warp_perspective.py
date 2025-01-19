@@ -1,6 +1,7 @@
 import rclpy
 from rclpy.node import Node
 from sensor_msgs.msg import Image
+from std_msgs.msg import Float32MultiArray
 from cv_bridge import CvBridge
 import cv2
 import numpy as np
@@ -13,17 +14,29 @@ class PerspectiveWarpNode(Node):
         # Parameters
         self.declare_parameter('input_image_topic', '/front_camera_sensor/image')
         self.declare_parameter('output_image_topic', '/birdseye_view/image')
+        self.declare_parameter('coord_transform', '/birdseye_view/coord_transform')
 
         # Load parameters
         self.input_image_topic = self.get_parameter('input_image_topic').value
         self.output_image_topic = self.get_parameter('output_image_topic').value
+        self.coord_transform_topic = self.get_parameter('coord_transform').value
 
         # Initialize variables
         self.bridge = CvBridge()
 
+        w, h = self.w, self.h = (800, 800)
+        sf = self.scale_factor = 35 # 35 pixels per meter.
+        tx, ty = (-400, -905)
+        self.T = np.float32([
+            [1/sf,0,tx/sf],
+            [0,1/sf,ty/sf],
+            [0,0,1]
+        ]) # Coordinate transformation matrix.
+
         # Subscribers and publishers
         self.image_sub = self.create_subscription(Image, self.input_image_topic, self.image_callback, 10)
         self.image_pub = self.create_publisher(Image, self.output_image_topic, 10)
+        self.coord_transform_pub = self.create_publisher(Float32MultiArray, self.coord_transform_topic, 10)
 
         self.get_logger().info("Perspective warp node initialized.")
 
@@ -39,7 +52,9 @@ class PerspectiveWarpNode(Node):
             warped_msg = self.bridge.cv2_to_imgmsg(warped_image, encoding='bgr8')
             self.image_pub.publish(warped_msg)
 
-            # self.get_logger().info("Published warped bird's-eye view image.")
+            coord_msg = Float32MultiArray()
+            coord_msg.data = self.T.reshape([9]).tolist()
+            self.coord_transform_pub.publish(coord_msg)
         except Exception as e:
             self.get_logger().error(f"Error warping or publishing image: {e}")
 
@@ -53,15 +68,17 @@ class PerspectiveWarpNode(Node):
             [533,438]
         ])
 
+        sf = self.scale_factor
+
         model_pts = np.float32([
             [0,0],
             [0,6],
             [6,6],
             [6,0]
-        ]) * 35 # 25 pixels per meter.
+        ]) * sf
 
-        model_pts[0:,0] += (w - 6*35) / 2
-        model_pts[0:,1] += (h - 6*35 - 2*35)
+        model_pts[0:,0] += (w - 6*sf) / 2
+        model_pts[0:,1] += (h - 6*sf - 2*sf)
 
         K = np.float32([
             [476.7030715942383, 0.0, 400.0],
@@ -78,19 +95,10 @@ class PerspectiveWarpNode(Node):
 
         img_warp = cv2.warpPerspective(
             img_undistorted,
-            H, (w,h),
+            H, (self.w,self.h),
             borderMode=cv2.BORDER_CONSTANT,
             borderValue=(0,0,0)
         )
-
-        # for i in range(0, 4):
-        #     cv2.circle(img_warp, (int(model_pts[i,0]), int(model_pts[i,1])), 3, (0,0,0), -1)
-
-        # for i in range(0, 4):
-        #     j = (i + 1)
-        #     if i == 3 : j = 0
-        #     cv2.line(img_warp, (int(model_pts[i,0]),int(model_pts[i,1])),
-        #              (int(model_pts[j,0]),int(model_pts[j,1])), (0,0,0), 2)
         
         return img_warp
 
