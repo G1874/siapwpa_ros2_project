@@ -92,7 +92,7 @@ class HelperNode(Node):
             [0,6],
             [6,6],
             [6,0]
-        ]) * 35 # 25 pixels per meter.
+        ]) * 35 # 35 pixels per meter.
 
         model_pts[0:,0] += (w - 6*35) / 2
         model_pts[0:,1] += (h - 6*35 - 2*35)
@@ -126,16 +126,32 @@ class HelperNode(Node):
             cv2.line(img_warp, (int(model_pts[i,0]),int(model_pts[i,1])),
                      (int(model_pts[j,0]),int(model_pts[j,1])), (0,0,0), 2)
 
-        print(img_pts)
+        print(model_pts)
 
         cv2.imshow("img", img)
         cv2.imshow("img warp", img_warp)
         cv2.waitKey(1)
 
+    def display_image_birdseye(self, msg):
+        pass
+        # cv_image = self.bridge.imgmsg_to_cv2(msg, desired_encoding='bgr8')
+        
+        # for i in range(0, 4):
+        #     cv2.circle(cv_image, (int(model_pts[i,0]), int(model_pts[i,1])), 3, (0,0,0), -1)
+
+        # for i in range(0, 4):
+        #     j = (i + 1)
+        #     if i == 3 : j = 0
+        #     cv2.line(cv_image, (int(model_pts[i,0]),int(model_pts[i,1])),
+        #              (int(model_pts[j,0]),int(model_pts[j,1])), (0,0,0), 2)
+
+        # cv2.imshow("img warp", cv_image)
+        # cv2.waitKey(1)
+
     def display_image(self, msg):
         cv_image = self.bridge.imgmsg_to_cv2(msg, desired_encoding='bgr8')
         
-        cv2.imshow("img warp 2", cv_image)
+        cv2.imshow("img 2", cv_image)
         cv2.waitKey(1)
         
 
