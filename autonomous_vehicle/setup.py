@@ -11,7 +11,7 @@ setup(
     data_files=[
         ('share/ament_index/resource_index/packages', ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
-        (os.path.join('share', package_name, 'launch'), glob(os.path.join('launch', '*launch.[pxy][yma]*')))
+        (os.path.join('share', package_name, 'launch'), glob(os.path.join('launch', '*launch.[pxy][yma]*'))),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
@@ -22,7 +22,10 @@ setup(
     entry_points={
         'console_scripts': [
             'warp_perspective = autonomous_vehicle.warp_perspective:main',
-            'helper_node = autonomous_vehicle.helper_node:main'
+            'helper_node = autonomous_vehicle.helper_node:main',
+            'image_binarizer = autonomous_vehicle.image_binarizer:main',
+            'binarization_slider = autonomous_vehicle.binarization_slider:main',
+            'image_skeletonizer = autonomous_vehicle.image_skeletonizer:main',
         ],
     },
 )
