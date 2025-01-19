@@ -36,7 +36,7 @@ class PerspectiveWarpNode(Node):
         self.image_pub = self.create_publisher(Image, self.output_image_topic, 10)
         self.slider_sub = self.create_subscription(Float32MultiArray, '/birdseye_slider_values', self.slider_callback, 10)
 
-        self.get_logger().info("Perspective warp node initialized.")
+        # self.get_logger().info("Perspective warp node initialized.")
 
     def slider_callback(self, msg):
         print(msg.data)
@@ -59,9 +59,11 @@ class PerspectiveWarpNode(Node):
 
             warped_msg = self.bridge.cv2_to_imgmsg(warped_image, encoding='bgr8')
             self.image_pub.publish(warped_msg)
-            self.get_logger().info("Published warped bird's-eye view image.")
+            pass
+            # self.get_logger().info("Published warped bird's-eye view image.")
         except Exception as e:
-            self.get_logger().error(f"Error warping or publishing image: {e}")
+            pass
+            # self.get_logger().error(f"Error warping or publishing image: {e}")
 
 
     def update_perspective(self, source):

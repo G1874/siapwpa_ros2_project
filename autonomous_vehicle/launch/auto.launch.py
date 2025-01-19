@@ -25,8 +25,33 @@ def generate_launch_description():
         output="screen"
     )
 
+    image_binarizer = Node(
+        package='autonomous_vehicle',
+        executable="image_binarizer",
+        name="image_binarizer",
+        output="screen",
+    )
+
+    bin_slider = Node(
+        package='autonomous_vehicle',
+        executable="binarization_slider",
+        name="binarization_slider",
+        output="screen",
+    )
+
+    image_skeletonizer = Node(
+        package='autonomous_vehicle',
+        executable="image_skeletonizer",
+        name="image_skeletonizer",
+        output="screen",
+    )
+
+
     return LaunchDescription([
         gz_sim_world,
         gz_bridge,
-        warp_perspective_node
+        warp_perspective_node,
+        image_binarizer,
+        # bin_slider
+        image_skeletonizer
     ])
