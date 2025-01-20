@@ -5,27 +5,25 @@ from cv_bridge import CvBridge
 import cv2
 import numpy as np
 from std_msgs.msg import Float32MultiArray
+from skimage.morphology import skeletonize
 
 class ImageBinarizerNode(Node):
-    def __init__(self, bin_thresh, area_max, area_min, hood_cutoff, left_cutoff, right_cutoff, top_cutoff):
+    def __init__(self, bin_thresh, area_max, area_min, hood_cutoff, left_cutoff, right_cutoff):
         super().__init__('image_binarizer')
         self.bin_thresh = bin_thresh
         self.area_max = area_max
         self.area_min = area_min
         self.hood_cutoff = hood_cutoff
-        ##
         self.left_cutoff = left_cutoff
         self.right_cutoff = right_cutoff
-        self.top_cutoff = top_cutoff
-        ##
         self.subscription = self.create_subscription(
             Image,
-            '/birdseye_view/image',
+            '/front_camera_sensor/image',
             self.image_callback,
             10
         )
 
-        self.publisher_ = self.create_publisher(Image, '/binarized_image', 10)
+        self.publisher_ = self.create_publisher(Image, '/binarized_road_image', 10)
         self.bridge = CvBridge()
         self.slider_sub = self.create_subscription(Float32MultiArray, '/binarization_slider_values', self.slider_callback, 10)
 
@@ -37,45 +35,50 @@ class ImageBinarizerNode(Node):
         self.hood_cutoff = msg.data[3]
         self.left_cutoff = msg.data[4]
         self.right_cutoff = msg.data[5]
-        self.top_cutoff = msg.data[6]
         
 
     def image_callback(self, msg):
         try:
             cv_image = self.bridge.imgmsg_to_cv2(msg, desired_encoding='bgr8')
+            x, y = cv_image.shape[0:2]
         except Exception as e:
             self.get_logger().error(f"Failed to convert image: {e}")
             return
+        ##################
+        # Temp
+        # lt = self.left_cutoff
+        # ht = self.right_cutoff
+        # bot_cutoff = self.hood_cutoff
+        # top_cutoff = self.left_cutoff
+        ##################
 
-        gray_image = cv2.cvtColor(cv_image, cv2.COLOR_BGR2GRAY)
-        _, binarized_image = cv2.threshold(gray_image, self.bin_thresh, 255, cv2.THRESH_BINARY)
-        x, y = binarized_image.shape
-    
+        lt = 0.12
+        ht = 0.22
+        bot_cutoff = 0.5
+        top_cutoff = 0.32
+        
+        low_thresh = (np.ones((3,))*lt*255).astype(np.uint8)
+        high_thresh = (np.ones((3,))*ht*255).astype(np.uint8)
+        binarized_image = cv2.inRange(cv_image, low_thresh, high_thresh)
+        binarized_image[0: int(x*bot_cutoff), :] = 0
+        binarized_image[int(x*(1-top_cutoff)):, :] = 0
 
         num_labels, labels, stats, _ = cv2.connectedComponentsWithStats(binarized_image, connectivity=8)
-
-        filtered_mask = np.zeros_like(binarized_image)
-        for label in range(1, num_labels): 
-            area = stats[label, cv2.CC_STAT_AREA]
-            if self.area_min <= area <= self.area_max:
-                filtered_mask[labels == label] = 255
-        binarized_image = filtered_mask
-
-        binarized_image[-int(x*self.hood_cutoff):, :] = 0
-        binarized_image[:, :int(y*self.left_cutoff)] = 0
-        binarized_image[:, -int(y*self.right_cutoff):] = 0
-        binarized_image[:int(x*self.top_cutoff), :] = 0
-        try:
-            binarized_msg = self.bridge.cv2_to_imgmsg(binarized_image, encoding='mono8')
-            self.publisher_.publish(binarized_msg)
-        except Exception as e:
-            pass
+        largest_area_idx = np.argmax(stats[1:, cv2.CC_STAT_AREA])
+        # binarized_image = np.where(labels == largest_area_idx+1, 255, 0).astype(np.uint8)
+        binarized_image = labels == largest_area_idx+1
+        # binarized_image = skeletonize(binarized_image)
+        cv2.imshow('binarized_image', (binarized_image).astype(np.uint8)*255)
+        cv2.waitKey(1)
+        
+        # binarized_msg = self.bridge.cv2_to_imgmsg(binarized_image, encoding='mono8')
+        # self.publisher_.publish(binarized_msg)
 
 import sys
 def main(args=None):
     rclpy.init(args=args)
     print(args)
-    node = ImageBinarizerNode(55, area_max=481, area_min=142, hood_cutoff=0.01, left_cutoff=0.33, right_cutoff=0.6, top_cutoff=0.01)
+    node = ImageBinarizerNode(bin_thresh=60, area_max=5000, area_min=0, hood_cutoff=0.06, left_cutoff=0.26, right_cutoff=0.6)
     try:
         rclpy.spin(node)
     except KeyboardInterrupt:

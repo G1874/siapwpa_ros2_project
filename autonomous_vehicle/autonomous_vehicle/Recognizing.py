@@ -143,8 +143,8 @@ class SignDetectorAndClassifier(Node):
                     2,
                 )
         ##########################
-        cv2.imshow("signs", frame)
-        cv2.waitKey(1)
+        # cv2.imshow("signs", frame)
+        # cv2.waitKey(1)
         ##########################
         frame = self.bridge.cv2_to_imgmsg(frame, encoding="bgr8")
         self.publisher.publish(frame)
