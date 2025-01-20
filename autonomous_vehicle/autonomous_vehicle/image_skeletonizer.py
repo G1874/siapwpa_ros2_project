@@ -39,7 +39,6 @@ class ImageSkeletonizerNode(Node):
             self.get_logger().warn("No points found for line fitting.")
         
         pts = np.linspace([x1, y1], [x2, y2], 20)
-        print(pts)
         points = Float32MultiArray()
         points_data = []
         for x, y in pts:
@@ -53,10 +52,6 @@ class ImageSkeletonizerNode(Node):
         
 
         self.publisher_img.publish(processed_msg)
-
-        # image_pts = np.arr
-        # msg = Float32MultiArray()
-
 
 def main(args=None):
     rclpy.init(args=args)

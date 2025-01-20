@@ -36,13 +36,14 @@ RUN apt update && \
         pytest-rerunfailures \
         pytest
 
+
 RUN pip3 install \
     kconfiglib \
     jsonschema \
     jinja2 \
     pyros-genmsg \
-    future 
-
+    future
+    
 
 # Install Gazebo Harmonic - Default Gazebo version in ROS2 Humble is Fortress
 RUN curl https://packages.osrfoundation.org/gazebo.gpg --output /usr/share/keyrings/pkgs-osrf-archive-keyring.gpg
@@ -70,4 +71,6 @@ RUN echo ". /opt/ros/$ROS_DISTRO/setup.bash" >> ~/.bashrc \
     && echo ". /home/developer/ros2_ws/install/setup.bash" >> ~/.bashrc \
     && echo "export GZ_SIM_RESOURCE_PATH=$HOME/ros2_ws/src/models" >> ~/.bashrc
 
+
+RUN pip3 install tensorflow==2.13.0
 CMD [ "sleep", "infinity" ]
