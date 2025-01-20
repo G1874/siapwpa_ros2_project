@@ -29,6 +29,7 @@ setup(
             'motion_control = autonomous_vehicle.motion_control:main',
             'Recognizing = autonomous_vehicle.Recognizing:main',
             'color_slider = autonomous_vehicle.color_slider:main',
+            'road_detector = autonomous_vehicle.road_detector:main',
         ],
     },
 )

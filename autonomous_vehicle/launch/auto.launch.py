@@ -67,6 +67,14 @@ def generate_launch_description():
         output="screen",
     )
 
+    # road_detector = Node(
+    #     package='autonomous_vehicle',
+    #     executable="road_detector",
+    #     name="road_detector",
+    #     output="screen",
+    # )
+
+
     return LaunchDescription([
         gz_sim_world,
         gz_bridge,
@@ -75,6 +83,6 @@ def generate_launch_description():
         # bin_slider,
         image_skeletonizer,
         # color_slider,
-        recognition
-
+        recognition,
+        # road_detector,
     ])

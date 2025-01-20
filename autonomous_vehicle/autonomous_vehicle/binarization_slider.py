@@ -10,11 +10,12 @@ class SliderControlNode(Node):
     def __init__(self):
         super().__init__('slider_control_node')
         self.bin_thresh = 55.0
-        self.area_max = 5000.0
-        self.area_min = 20
+        self.area_max = 481
+        self.area_min = 142
         self.hood_cutoff = 0.01
-        self.left_cutoff = 0.18
-        self.right_cutoff = 0.43
+        self.left_cutoff = 0.33
+        self.right_cutoff = 0.6
+        self.top_cutoff = 0.01
         self.pub = self.create_publisher(Float32MultiArray, '/binarization_slider_values', 10)
         plt.subplots_adjust(left=0.1, bottom=0.1, top=0.9, right=0.9)
 
@@ -24,6 +25,7 @@ class SliderControlNode(Node):
         self.slider_hc = self.create_slider('hood_cutoff', 0.01, 1.0, self.hood_cutoff, 0.01, 0.55)
         self.slider_lc = self.create_slider('left_cutoff', 0.01, 1.0, self.left_cutoff, 0.01, 0.45)
         self.slider_rc = self.create_slider('right_cutoff', 0.01, 1.0, self.right_cutoff, 0.01, 0.35)
+        self.slider_tc = self.create_slider('top_cutoff', 0.01, 1.0, self.right_cutoff, 0.01, 0.25)
 
         self.get_logger().info("Slider control node initialized.")
         self.slider_update(0)
@@ -41,11 +43,12 @@ class SliderControlNode(Node):
         self.hood_cutoff = self.slider_hc.val
         self.left_cutoff = self.slider_lc.val
         self.right_cutoff = self.slider_rc.val
+        self.top_cutoff = self.slider_tc.val
 
         # self.get_logger().info(f"Updated values: bin_thresh={self.bin_thresh}, area_max={self.area_max}, area_min={self.area_min}, hood_cutoff={self.hood_cutoff}") 
 
         msg = Float32MultiArray()
-        msg.data = list(map(float, [self.bin_thresh, self.area_max, self.area_min, self.hood_cutoff, self.left_cutoff, self.right_cutoff]))
+        msg.data = list(map(float, [self.bin_thresh, self.area_max, self.area_min, self.hood_cutoff, self.left_cutoff, self.right_cutoff, self.top_cutoff]))
         self.pub.publish(msg)
         # self.get_logger().info("Published updated values to topic.")
 
