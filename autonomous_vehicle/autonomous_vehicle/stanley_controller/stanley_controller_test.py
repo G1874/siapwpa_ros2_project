@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
-from stanley_controller import *
-from PathPlanning.CubicSpline import cubic_spline_planner
+from .stanley_controller import *
+from . import cubic_spline_planner
 
 
 show_animation = True

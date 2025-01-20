@@ -1,5 +1,5 @@
 import numpy as np
-from utils.angle import angle_mod
+from .angle import angle_mod
 
 
 k = 0.5  # control gain

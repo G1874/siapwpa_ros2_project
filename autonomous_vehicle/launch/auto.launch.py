@@ -46,6 +46,12 @@ def generate_launch_description():
         output="screen",
     )
 
+    motion_control_node = Node(
+        package='autonomous_vehicle',
+        executable='motion_control',
+        name='motion_control',
+        output="screen"
+    )
 
     return LaunchDescription([
         gz_sim_world,
@@ -53,5 +59,6 @@ def generate_launch_description():
         warp_perspective_node,
         image_binarizer,
         # bin_slider
-        image_skeletonizer
+        image_skeletonizer,
+        motion_control_node
     ])

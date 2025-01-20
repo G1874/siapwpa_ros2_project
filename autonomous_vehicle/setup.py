@@ -3,11 +3,12 @@ import os
 from glob import glob
 
 package_name = 'autonomous_vehicle'
+submodules = 'autonomous_vehicle/stanley_controller'
 
 setup(
     name=package_name,
     version='0.0.0',
-    packages=[package_name],
+    packages=[package_name, submodules],
     data_files=[
         ('share/ament_index/resource_index/packages', ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
@@ -26,6 +27,7 @@ setup(
             'image_binarizer = autonomous_vehicle.image_binarizer:main',
             'binarization_slider = autonomous_vehicle.binarization_slider:main',
             'image_skeletonizer = autonomous_vehicle.image_skeletonizer:main',
+            'motion_control = autonomous_vehicle.motion_control:main',
         ],
     },
 )

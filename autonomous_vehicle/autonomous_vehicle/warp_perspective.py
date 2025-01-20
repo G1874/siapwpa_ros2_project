@@ -24,7 +24,7 @@ class PerspectiveWarpNode(Node):
         # Initialize variables
         self.bridge = CvBridge()
 
-        w, h = self.w, self.h = (800, 800)
+        self.w, self.h = (800, 800)
         sf = self.scale_factor = 35 # 35 pixels per meter.
         tx, ty = (-400, -905)
         self.T = np.float32([
@@ -59,7 +59,7 @@ class PerspectiveWarpNode(Node):
             self.get_logger().error(f"Error warping or publishing image: {e}")
 
     def update_perspective(self, img):
-        w, h = (800, 800)
+        w, h = (self.w, self.h)
 
         img_pts = np.float32([
             [265,438],
