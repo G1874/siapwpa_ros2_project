@@ -76,5 +76,4 @@ def generate_launch_description():
         image_skeletonizer,
         # color_slider,
         recognition
-
     ])
