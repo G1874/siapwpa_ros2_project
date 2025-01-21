@@ -63,7 +63,7 @@ class MotionControl(Node):
 
     def timer_2_callback(self):
         if type(self.road_pts) == None:
-            x = list(self.road_pts[0:,0])
+            x = list(self.road_pts[0:,0]) # TODO: Change coordinates of points, consider downsampling.
             y = list(self.road_pts[0:,1])
 
             c_x, c_y, c_yaw, _, _ = cubic_spline_planner.calc_spline_course(x, y, ds=0.1)
@@ -90,11 +90,13 @@ class MotionControl(Node):
         c_y = waypoints[1]
         c_yaw = waypoints[2]
 
+        # TODO: Figure it out. 
         delta, self.target_idx = stanley_control(self.state, c_x, c_y, c_yaw, self.target_idx)        
 
         self.send_setpoints(vel_setpoint, 5)
 
     def update_state(self):
+        # TODO:
         pass
 
 
