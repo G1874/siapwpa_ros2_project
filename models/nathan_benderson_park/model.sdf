@@ -72,29 +72,6 @@
                     </pbr>
                 </material>
             </visual>
-            <visual name="Concrete_visual">
-                <geometry>
-                    <mesh>
-                        <uri>meshes/nb_park.dae</uri>
-                        <submesh>
-                            <name>Concrete</name>
-                            <center>false</center>
-                        </submesh>
-                    </mesh>
-                </geometry>
-                <material>
-                    <diffuse>1.0 1.0 1.0</diffuse>
-                    <specular>0.06 0.06 0.06</specular>
-                    <pbr>
-                        <metal>
-                            <albedo_map>materials/textures/Concrete_Albedo.png</albedo_map>
-                            <normal_map>materials/textures/Concrete_Normal.png</normal_map>
-                            <roughness_map>materials/textures/Concrete_Roughness.png</roughness_map>
-                            <environment_map>materials/textures/EnvMap.dds</environment_map>
-                        </metal>
-                    </pbr>
-                </material>
-            </visual>
             <visual name="Railing_visual">
                 <geometry>
                     <mesh>
