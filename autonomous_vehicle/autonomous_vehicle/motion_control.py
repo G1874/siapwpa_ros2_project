@@ -42,7 +42,7 @@ class MotionControl(Node):
 
         # Initialize variables
         self.timer_1_period = 0.1    # Send setpoints to velocity controller.
-        self.timer_2_period = 2      # Update trajectory.
+        self.timer_2_period = 1      # Update trajectory.
 
         self.cmd_vel_msg = Twist()
         
@@ -71,14 +71,16 @@ class MotionControl(Node):
 
 
     def timer_1_callback(self):
-        self.motion_controller(self.waypoints, 5.0)
+        self.motion_controller(self.waypoints, 1.0)
 
     def timer_2_callback(self):
         if self.road_pts is not None:
             H = self.coord_transform
             H = np.array(H).reshape((3,3))
             pts = np.concatenate((self.road_pts, np.ones((self.road_pts.shape[0],1))), axis=1)            
-            pts = np.array([np.matmul(v.T, H).T for v in pts])
+            pts = np.array([np.matmul(H, v.T).T for v in pts])
+
+            self.get_logger().info(f'pts: {pts}')
 
             x = list(pts[0:,0])
             y = list(pts[0:,0])
@@ -121,7 +123,7 @@ class MotionControl(Node):
             c_y = waypoints[1]
             c_yaw = waypoints[2]
 
-            delta, self.target_idx = stanley_control(self.state, c_x, c_y, c_yaw, self.target_idx)        
+            delta, self.target_idx = stanley_control(self.state, c_x, c_y, c_yaw, self.target_idx)
             turningRadius = L / np.sin(delta)
             target_yaw_rate = self.state.v / turningRadius
 
@@ -150,11 +152,13 @@ class MotionControl(Node):
         # plt.axis("equal")
         # plt.grid(True)
 
+    
+
 
 def main(args=None):
     rclpy.init(args=args)
     node = MotionControl()
-    
+
     try:
         rclpy.spin(node)
     except KeyboardInterrupt:
