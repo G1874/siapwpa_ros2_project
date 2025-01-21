@@ -84,12 +84,13 @@ def generate_launch_description():
     return LaunchDescription([
         gz_sim_world,
         gz_bridge,
-        # warp_perspective_node,
-        # image_binarizer,
-        # # bin_slider,
-        # image_skeletonizer,
-        # # color_slider,
-        # recognition,
-        # # road_detector,
-        pedestrians,
+        warp_perspective_node,
+        image_binarizer,
+        motion_control_node,
+        # bin_slider,
+        image_skeletonizer,
+        # color_slider,
+        recognition
+        # road_detector,
+        # pedestrians,
     ])
