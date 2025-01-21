@@ -75,3 +75,11 @@
   gz_type_name: "gz.msgs.Twist"
   direction: ROS_TO_GZ
 ### Drive system ###
+
+### Odometry ###
+- ros_topic_name: "odometry"
+  gz_topic_name: "/model/prius_hybrid/odometry"
+  ros_type_name: "nav_msgs/msg/Odometry"
+  gz_type_name: "gz.msgs.Odometry"
+  direction: GZ_TO_ROS
+### Odometry ###
