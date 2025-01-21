@@ -25,7 +25,7 @@ class PurePursuitNode(Node):
 
         self.subscription_odom = self.create_subscription(
             Odometry,
-            '/odom',
+            '/odometry',
             self.odom_callback,
             10
         )

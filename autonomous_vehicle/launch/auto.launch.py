@@ -93,12 +93,12 @@ def generate_launch_description():
         gz_bridge,
         warp_perspective_node,
         image_binarizer,
-        # motion_control_node,
+        motion_control_node,
         # bin_slider,
         image_skeletonizer,
         # color_slider,
-        # recognition,
+        recognition
         # road_detector,
         # pedestrians,
-        terrible_motion_control
+        # terrible_motion_control
     ])
