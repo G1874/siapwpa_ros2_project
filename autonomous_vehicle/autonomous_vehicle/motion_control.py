@@ -42,7 +42,7 @@ class MotionControl(Node):
 
         # Initialize variables
         self.timer_1_period = 0.1    # Send setpoints to velocity controller.
-        self.timer_2_period = 1      # Update trajectory.
+        self.timer_2_period = 2      # Update trajectory.
 
         self.cmd_vel_msg = Twist()
         
@@ -52,8 +52,6 @@ class MotionControl(Node):
         self.waypoints = None
         self.target_idx = None
         self.state = VehicleState(self.timer_1_period)
-
-        self.H = None               # Coord transform matrix.
 
         # Timers
         self.timer_1 = self.create_timer(self.timer_1_period, self.timer_1_callback)
@@ -73,17 +71,17 @@ class MotionControl(Node):
 
 
     def timer_1_callback(self):
-        self.motion_controller(self.waypoints, 1.0)
+        self.motion_controller(self.waypoints, 5.0)
 
     def timer_2_callback(self):
         if self.road_pts is not None:
+            H = self.coord_transform
+            H = np.array(H).reshape((3,3))
             pts = np.concatenate((self.road_pts, np.ones((self.road_pts.shape[0],1))), axis=1)            
-            pts = np.array([np.matmul(self.H, v.T).T for v in pts])
+            pts = np.array([np.matmul(v.T, H).T for v in pts])
 
             x = list(pts[0:,0])
-            y = list(pts[0:,1])
-
-            self.get_logger().info(f'x: {x}, y: {y}')
+            y = list(pts[0:,0])
 
             c_x, c_y, c_yaw, _, _ = cubic_spline_planner.calc_spline_course(x, y, ds=0.1)
             
@@ -97,8 +95,7 @@ class MotionControl(Node):
     def coord_transform_callback(self, msg):
         if self.coord_transform is None:  # Read it only once.
             self.coord_transform = msg.data
-            self.H = np.array(self.coord_transform).reshape((3,3))
-
+        
     def road_pts_callback(self, msg):
         points = np.array(msg.data, dtype=np.float32)
         self.road_pts = np.reshape(points, (points.size//2, 2))
@@ -124,7 +121,7 @@ class MotionControl(Node):
             c_y = waypoints[1]
             c_yaw = waypoints[2]
 
-            delta, self.target_idx = stanley_control(self.state, c_x, c_y, c_yaw, self.target_idx)
+            delta, self.target_idx = stanley_control(self.state, c_x, c_y, c_yaw, self.target_idx)        
             turningRadius = L / np.sin(delta)
             target_yaw_rate = self.state.v / turningRadius
 
@@ -153,13 +150,11 @@ class MotionControl(Node):
         # plt.axis("equal")
         # plt.grid(True)
 
-    
-
 
 def main(args=None):
     rclpy.init(args=args)
     node = MotionControl()
-
+    
     try:
         rclpy.spin(node)
     except KeyboardInterrupt:
