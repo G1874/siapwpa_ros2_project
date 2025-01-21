@@ -39,11 +39,11 @@ def generate_launch_description():
         output="screen",
     )
 
-    image_skeletonizer = Node(
+    motion_control_node = Node(
         package='autonomous_vehicle',
-        executable="image_skeletonizer",
-        name="image_skeletonizer",
-        output="screen",
+        executable='motion_control',
+        name='motion_control',
+        output="screen"
     )
 
     image_skeletonizer = Node(
@@ -80,9 +80,10 @@ def generate_launch_description():
         gz_bridge,
         warp_perspective_node,
         image_binarizer,
+        motion_control_node,
         # bin_slider,
         image_skeletonizer,
         # color_slider,
-        recognition,
+        recognition
         # road_detector,
     ])
