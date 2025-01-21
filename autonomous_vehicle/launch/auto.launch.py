@@ -39,13 +39,6 @@ def generate_launch_description():
         output="screen",
     )
 
-    image_skeletonizer = Node(
-        package='autonomous_vehicle',
-        executable="image_skeletonizer",
-        name="image_skeletonizer",
-        output="screen",
-    )
-
     motion_control_node = Node(
         package='autonomous_vehicle',
         executable='motion_control',
@@ -53,12 +46,44 @@ def generate_launch_description():
         output="screen"
     )
 
+    image_skeletonizer = Node(
+        package='autonomous_vehicle',
+        executable="image_skeletonizer",
+        name="image_skeletonizer",
+        output="screen",
+    )
+
+    recognition = Node( 
+        package='autonomous_vehicle',
+        executable="Recognizing",
+        name="Recognizing",
+        output="screen",
+    )
+
+    color_slider = Node(
+        package='autonomous_vehicle',
+        executable="color_slider",
+        name="color_slider",
+        output="screen",
+    )
+
+    # road_detector = Node(
+    #     package='autonomous_vehicle',
+    #     executable="road_detector",
+    #     name="road_detector",
+    #     output="screen",
+    # )
+
+
     return LaunchDescription([
         gz_sim_world,
         gz_bridge,
         warp_perspective_node,
         image_binarizer,
-        # bin_slider
+        motion_control_node,
+        # bin_slider,
         image_skeletonizer,
-        motion_control_node
+        # color_slider,
+        recognition
+        # road_detector,
     ])

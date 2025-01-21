@@ -7,7 +7,7 @@ import numpy as np
 from std_msgs.msg import Float32MultiArray
 
 class ImageBinarizerNode(Node):
-    def __init__(self, bin_thresh, area_max, area_min, hood_cutoff, left_cutoff, right_cutoff):
+    def __init__(self, bin_thresh, area_max, area_min, hood_cutoff, left_cutoff, right_cutoff, top_cutoff):
         super().__init__('image_binarizer')
         self.bin_thresh = bin_thresh
         self.area_max = area_max
@@ -16,6 +16,7 @@ class ImageBinarizerNode(Node):
         ##
         self.left_cutoff = left_cutoff
         self.right_cutoff = right_cutoff
+        self.top_cutoff = top_cutoff
         ##
         self.subscription = self.create_subscription(
             Image,
@@ -36,6 +37,7 @@ class ImageBinarizerNode(Node):
         self.hood_cutoff = msg.data[3]
         self.left_cutoff = msg.data[4]
         self.right_cutoff = msg.data[5]
+        self.top_cutoff = msg.data[6]
         
 
     def image_callback(self, msg):
@@ -62,37 +64,18 @@ class ImageBinarizerNode(Node):
         binarized_image[-int(x*self.hood_cutoff):, :] = 0
         binarized_image[:, :int(y*self.left_cutoff)] = 0
         binarized_image[:, -int(y*self.right_cutoff):] = 0
-        # # self.get_logger().info(f"{-int(y*self.left_cutoff)}")
-        # self.get_logger().info(f"{self.left_cutoff}")
-
-        # coordinates = np.column_stack(np.where(binarized_image == 255))
-        # if coordinates.size > 0:
-        #     lowest_point = coordinates[np.argmax(coordinates[:, 0])]
-        #     highest_point = coordinates[np.argmin(coordinates[:, 0])]
-        # binarized_image = cv2.cvtColor(binarized_image, cv2.COLOR_GRAY2BGR)
-        # binarized_image = cv2.drawMarker(binarized_image, tuple(lowest_point), (0, 0, 255), markerType=cv2.MARKER_CROSS, markerSize=20, thickness=2)
-        # binarized_image = cv2.drawMarker(binarized_image, tuple(highest_point), (0, 0, 255), markerType=cv2.MARKER_CROSS, markerSize=20, thickness=2)
-
-        # binarized_image[labels != max_label] = 0
-
+        binarized_image[:int(x*self.top_cutoff), :] = 0
         try:
-            # binarized_msg = self.bridge.cv2_to_imgmsg(binarized_image, encoding='bgr8')
             binarized_msg = self.bridge.cv2_to_imgmsg(binarized_image, encoding='mono8')
             self.publisher_.publish(binarized_msg)
-            pass
-            # self.get_logger().info("Published the binarized image")
         except Exception as e:
             pass
-            # self.get_logger().error(f"Failed to convert or publish image: {e}")
 
 import sys
 def main(args=None):
-    # thresh = int(sys.argv[1]) if len(sys.argv) > 1 else 127
-    # area = int(sys.argv[2]) if len(sys.argv) > 2 else 800
-    # area_min = int(sys.argv[3]) if len(sys.argv) > 3 else 0
     rclpy.init(args=args)
     print(args)
-    node = ImageBinarizerNode(60, area_max=5000, area_min=0, hood_cutoff=0.06, left_cutoff=0.26, right_cutoff=0.6)
+    node = ImageBinarizerNode(55, area_max=481, area_min=142, hood_cutoff=0.01, left_cutoff=0.33, right_cutoff=0.6, top_cutoff=0.01)
     try:
         rclpy.spin(node)
     except KeyboardInterrupt:

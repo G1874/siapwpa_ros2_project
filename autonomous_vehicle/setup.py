@@ -28,6 +28,9 @@ setup(
             'binarization_slider = autonomous_vehicle.binarization_slider:main',
             'image_skeletonizer = autonomous_vehicle.image_skeletonizer:main',
             'motion_control = autonomous_vehicle.motion_control:main',
+            'Recognizing = autonomous_vehicle.Recognizing:main',
+            'color_slider = autonomous_vehicle.color_slider:main',
+            'road_detector = autonomous_vehicle.road_detector:main',
         ],
     },
 )
