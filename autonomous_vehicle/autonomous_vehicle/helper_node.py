@@ -55,20 +55,26 @@ class HelperNode(Node):
         # Parameters
         self.declare_parameter('input_image_topic', '/front_camera_sensor/image')
         self.declare_parameter('birdseye_image_topic', '/birdseye_view/image')
-        self.declare_parameter('road_vis', '/road_vis')
+        self.declare_parameter('road_viz', '/road_viz')
+        self.declare_parameter('sign_image', '/sign_trafficking')
 
         # Load parameters
         self.input_image_topic = self.get_parameter('input_image_topic').value
         self.birdseye_image_topic = self.get_parameter('birdseye_image_topic').value
-        self.road_vis_topic = self.get_parameter('road_vis').value
+        self.road_viz_topic = self.get_parameter('road_viz').value
+        self.sign_image_topic = self.get_parameter('sign_image').value
         
         # Initialize variables
         self.bridge = CvBridge()
 
+        self.birdseye_image = np.zeros((800, 800))
+        self.road_vis_image = np.zeros((800, 800))
+
         # Subscribers and publishers
-        self.image_sub = self.create_subscription(Image, self.input_image_topic, self.display_image, 10)
+        # self.image_sub = self.create_subscription(Image, self.input_image_topic, self.display_image, 10)
         self.birdseye_sub = self.create_subscription(Image, self.birdseye_image_topic, self.display_image_birdseye, 10)
-        self.road_vis_sub = self.create_subscription(Image, self.road_vis_topic, self.display_road_vis, 10)
+        self.road_viz_sub = self.create_subscription(Image, self.road_viz_topic, self.display_road_vis, 10)
+        self.sign_image_sub = self.create_subscription(Image, self.sign_image_topic, self.display_sign_img, 10)
 
     def proces_image(self, msg):
         img = self.bridge.imgmsg_to_cv2(msg, desired_encoding='bgr8')
@@ -136,7 +142,7 @@ class HelperNode(Node):
         cv2.waitKey(1)
 
     def display_image_birdseye(self, msg):
-        cv_image = self.bridge.imgmsg_to_cv2(msg, desired_encoding='bgr8')
+        self.birdseye_image = self.bridge.imgmsg_to_cv2(msg, desired_encoding='bgr8')
         
         # for i in range(0, 4):
         #     cv2.circle(cv_image, (int(model_pts[i,0]), int(model_pts[i,1])), 3, (0,0,0), -1)
@@ -147,7 +153,11 @@ class HelperNode(Node):
         #     cv2.line(cv_image, (int(model_pts[i,0]),int(model_pts[i,1])),
         #              (int(model_pts[j,0]),int(model_pts[j,1])), (0,0,0), 2)
 
-        cv2.imshow("img warp", cv_image)
+        disp_image = self.birdseye_image
+        disp_image[self.road_vis_image != 0] = 0
+        self.road_vis_image = np.zeros((800, 800))
+
+        cv2.imshow("img warp", disp_image)
         cv2.waitKey(1)
 
     def display_image(self, msg):
@@ -157,9 +167,15 @@ class HelperNode(Node):
         cv2.waitKey(1)
 
     def display_road_vis(self, msg):
-        cv_image = self.bridge.imgmsg_to_cv2(msg, desired_encoding='bgr8')
+        self.road_vis_image = self.bridge.imgmsg_to_cv2(msg, desired_encoding='bgr8')
         
-        cv2.imshow("road_vis", cv_image)
+        # cv2.imshow("road_vis", disp_image)
+        # cv2.waitKey(1)
+
+    def display_sign_img(self, msg):
+        sign_img = self.bridge.imgmsg_to_cv2(msg, desired_encoding='bgr8')
+        
+        cv2.imshow("sign_img", sign_img)
         cv2.waitKey(1)
         
 
