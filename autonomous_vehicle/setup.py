@@ -30,6 +30,7 @@ setup(
             'Recognizing = autonomous_vehicle.Recognizing:main',
             'color_slider = autonomous_vehicle.color_slider:main',
             'road_detector = autonomous_vehicle.road_detector:main',
+            'pedestrians = autonomous_vehicle.pedestrians:main',
         ],
     },
 )
