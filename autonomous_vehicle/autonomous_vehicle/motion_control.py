@@ -3,6 +3,7 @@ from rclpy.node import Node
 from std_msgs.msg import Float32MultiArray
 from geometry_msgs.msg import Twist
 from nav_msgs.msg import Odometry
+from std_msgs.msg import String
 import numpy as np
 from .stanley_controller.stanley_controller import *
 from .stanley_controller import cubic_spline_planner
@@ -33,13 +34,15 @@ class MotionControl(Node):
         self.declare_parameter('cmd_vel', '/cmd_vel')
         self.declare_parameter('road_pts', '/road_pts')
         self.declare_parameter('odometry', '/odometry')
+        self.declare_parameter('sign_detection', '/sign_detect')
 
         # Load parameters
         self.cmd_vel_test = self.get_parameter('cmd_vel').value
         self.coord_transform_topic = self.get_parameter('coord_transform').value
         self.road_pts_topic = self.get_parameter('road_pts').value
         self.odometry_topic = self.get_parameter('odometry').value
-
+        self.sign_detection_class_topic = self.get_parameter('sign_detection').value
+        
         # Initialize variables
         self.timer_1_period = 0.1    # Send setpoints to velocity controller.
         self.timer_2_period = 2      # Update trajectory.
@@ -48,6 +51,8 @@ class MotionControl(Node):
         
         self.road_pts = None
         self.coord_transform = None
+        self.sign_class = None
+        self.current_speed = 1.0
 
         self.waypoints = None
         self.target_idx = None
@@ -68,10 +73,19 @@ class MotionControl(Node):
         self.odometry_sub = self.create_subscription(Odometry,
                                                      self.odometry_topic,
                                                      self.update_state, 10)
-
+        self.sign_class_sub = self.create_subscription(String,
+                                                       self.sign_detection_class_topic,
+                                                       self.sign_class_callback, 10)
+        
+    def sign_class_callback(self, msg):
+        if "Speed limit" in msg.data:
+            speed = float(msg.data.split('(')[1].split('km/h')[0].strip())
+            self.current_speed = float(speed) / 10.0
+        self.get_logger().info(f"Detected sign: {msg.data}, setting speed to {self.current_speed} km/h")
 
     def timer_1_callback(self):
-        self.motion_controller(self.waypoints, 5.0)
+        self.get_logger().info(f"{self.current_speed}")
+        self.motion_controller(self.waypoints, self.current_speed)
 
     def timer_2_callback(self):
         if self.road_pts is not None:
