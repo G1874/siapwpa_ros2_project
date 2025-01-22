@@ -87,7 +87,6 @@ class MotionControl(Node):
         self.get_logger().info(f"Detected sign: {msg.data}, setting speed to {self.current_speed} km/h")
 
     def timer_1_callback(self):
-        self.get_logger().info(f"{self.current_speed}")
         self.motion_controller(self.waypoints, self.current_speed)
 
     def timer_2_callback(self):
@@ -98,7 +97,7 @@ class MotionControl(Node):
             x = list(pts[0:,0])
             y = list(pts[0:,1])
 
-            self.get_logger().info(f'x: {x}, y: {y}')
+            # self.get_logger().info(f'x: {x}, y: {y}')
 
             c_x, c_y, c_yaw, _, _ = cubic_spline_planner.calc_spline_course(x, y, ds=0.1)
             
@@ -140,13 +139,17 @@ class MotionControl(Node):
             c_yaw = waypoints[2]
 
             delta, self.target_idx = stanley_control(self.state, c_x, c_y, c_yaw, self.target_idx)
-            turningRadius = L * np.tan(delta)
-            # turningRadius = L / np.sin(delta)
+            # turningRadius = L * np.tan(delta)
+            turningRadius = L / np.sin(delta)
             target_yaw_rate = self.state.v / turningRadius
 
             self.send_setpoints(target_vel, target_yaw_rate)
+
+            delta_conv = np.sign(delta)*(90 - np.rad2deg(np.abs(delta)))
+            self.get_logger().info(f"v: {target_vel}, delta: {delta_conv}")
         else:
-            self.send_setpoints(target_vel, 0.0)
+            target_yaw_rate = 0.0
+            self.send_setpoints(target_vel, target_yaw_rate)
 
     def display(self, pos_x=None, pos_y=None):
         # plt.cla()
