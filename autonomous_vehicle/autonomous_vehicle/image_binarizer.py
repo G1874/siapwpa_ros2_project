@@ -154,9 +154,9 @@ class ImageBinarizerNode(Node):
         yellow_mask = filtered_mask
         
         yellow_mask[-int(x * self.hood_cutoff):, :] = 0
-        yellow_mask[:, :int(y * self.left_cutoff)] = 0
-        yellow_mask[:, -int(y * self.right_cutoff):] = 0
-        yellow_mask[:int(x * self.top_cutoff), :] = 0
+        # yellow_mask[:, :int(y * self.left_cutoff)] = 0
+        # yellow_mask[:, -int(y * self.right_cutoff):] = 0
+        # yellow_mask[:int(x * self.top_cutoff), :] = 0
 
         try:
             binarized_msg = self.bridge.cv2_to_imgmsg(yellow_mask, encoding='mono8')
