@@ -74,6 +74,19 @@ def generate_launch_description():
     #     output="screen",
     # )
 
+    pedestrians = Node(
+        package='autonomous_vehicle',
+        executable="pedestrians",
+        name="pedestrians",
+        output="screen",
+    )
+
+    terrible_motion_control = Node(
+        package='autonomous_vehicle',
+        executable="terrible_motion_control",
+        name="terrible_motion_control",
+        output="screen",
+    )
 
     return LaunchDescription([
         gz_sim_world,
@@ -86,4 +99,6 @@ def generate_launch_description():
         # color_slider,
         recognition
         # road_detector,
+        # pedestrians,
+        # terrible_motion_control
     ])
