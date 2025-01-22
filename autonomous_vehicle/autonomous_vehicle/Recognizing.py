@@ -2,6 +2,7 @@
 import rclpy
 from rclpy.node import Node
 from sensor_msgs.msg import Image
+from std_msgs.msg import String
 from std_msgs.msg import Float32MultiArray
 
 import cv2
@@ -35,6 +36,7 @@ class SignDetectorAndClassifier(Node):
             "/home/developer/ros2_ws/src/autonomous_vehicle/autonomous_vehicle/good_model"
         )
         self.publisher = self.create_publisher(Image, "/sign_trafficking", 10)
+        self.class_publisher = self.create_publisher(String, "sign_detect", 10)
         self.class_labels = {
             1: "Speed limit (20km/h)",
             2: "Speed limit (30km/h)",
@@ -126,12 +128,14 @@ class SignDetectorAndClassifier(Node):
         signs = np.logical_or(red_signs, blue_signs)
         _, _, stats, _ = cv2.connectedComponentsWithStats(signs.astype(np.uint8) * 255)
 
+        det_classes = []
         # ignore the first stat which is the background
         for x, y, w, h, a in stats[1:]:
             # ignore small regions and regions that are not basically square
             if a >= 100 and abs(w - h) < 5:
                 cropped_region = frame[y : y + h, x : x + w]
                 label, confidence = self.classify_sign(cropped_region)
+                det_classes.append(f"{label} ({confidence:.2f})")
                 cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
                 cv2.putText(
                     frame,
@@ -148,6 +152,11 @@ class SignDetectorAndClassifier(Node):
         ##########################
         frame = self.bridge.cv2_to_imgmsg(frame, encoding="bgr8")
         self.publisher.publish(frame)
+
+        for det_class in det_classes:
+            message = String()
+            message.data = det_class
+            self.class_publisher.publish(message)
 
 
 
