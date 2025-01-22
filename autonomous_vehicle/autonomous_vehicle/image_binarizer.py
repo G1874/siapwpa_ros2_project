@@ -158,9 +158,6 @@ class ImageBinarizerNode(Node):
         yellow_mask[:, -int(y * self.right_cutoff):] = 0
         yellow_mask[:int(x * self.top_cutoff), :] = 0
 
-        cv2.imshow("yellow_mask", yellow_mask)
-        cv2.waitKey(1)
-
         try:
             binarized_msg = self.bridge.cv2_to_imgmsg(yellow_mask, encoding='mono8')
             self.publisher_.publish(binarized_msg)
@@ -173,7 +170,7 @@ import sys
 def main(args=None):
     rclpy.init(args=args)
     print(args)
-    node = ImageBinarizerNode(55, area_max=481, area_min=142, hood_cutoff=0.01, left_cutoff=0.33, right_cutoff=0.6, top_cutoff=0.01)
+    node = ImageBinarizerNode(55, area_max=234, area_min=142, hood_cutoff=0.01, left_cutoff=0.33, right_cutoff=0.5, top_cutoff=0.01)
     try:
         rclpy.spin(node)
     except KeyboardInterrupt:
