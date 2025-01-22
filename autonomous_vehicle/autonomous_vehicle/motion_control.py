@@ -20,6 +20,7 @@ class VehicleState(State):
         self.yaw_rate = yaw_rate
 
         self.yaw += self.yaw_rate * self.dt
+        self.yaw = normalize_angle(self.yaw)
         self.x += self.v * np.cos(self.yaw) * self.dt
         self.y += self.v * np.sin(self.yaw) * self.dt
 
@@ -41,8 +42,8 @@ class MotionControl(Node):
         self.odometry_topic = self.get_parameter('odometry').value
 
         # Initialize variables
-        self.timer_1_period = 0.1    # Send setpoints to velocity controller.
-        self.timer_2_period = 1      # Update trajectory.
+        self.timer_1_period = 0.01    # Send setpoints to velocity controller.
+        self.timer_2_period = 0.5      # Update trajectory.
 
         self.cmd_vel_msg = Twist()
         
@@ -73,7 +74,7 @@ class MotionControl(Node):
 
 
     def timer_1_callback(self):
-        self.motion_controller(self.waypoints, 1.0)
+        self.motion_controller(self.waypoints, 4.0)
 
     def timer_2_callback(self):
         if self.road_pts is not None:
@@ -125,7 +126,8 @@ class MotionControl(Node):
             c_yaw = waypoints[2]
 
             delta, self.target_idx = stanley_control(self.state, c_x, c_y, c_yaw, self.target_idx)
-            turningRadius = L / np.sin(delta)
+            turningRadius = L * np.tan(delta)
+            # turningRadius = L / np.sin(delta)
             target_yaw_rate = self.state.v / turningRadius
 
             self.send_setpoints(target_vel, target_yaw_rate)

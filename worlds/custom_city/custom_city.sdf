@@ -68,7 +68,7 @@
 
     <!-- Vehicle model -->
     <include>
-      <pose>-132 1100 10 0 0 0</pose>
+      <pose>-132 1050 10 0 0 0</pose>
       <uri>model://Prius_sensors</uri>
     </include>
 
