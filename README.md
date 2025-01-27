@@ -1,10 +1,6 @@
 **Oryginalna dokumentacja repozytorium:**
 [Original README](docs/README.md)
 
-### TODO:
-- [ ] Dodać znaki do świata.
-- [ ] Launch file.
-
 ### Przydatne komendy / informacje:
 Bridge ROS-Gazebo:
 ```bash
