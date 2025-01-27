@@ -151,29 +151,6 @@ class MotionControl(Node):
             target_yaw_rate = 0.0
             self.send_setpoints(target_vel, target_yaw_rate)
 
-    def display(self, pos_x=None, pos_y=None):
-        # plt.cla()
-        
-        # if self.waypoints is not None:
-        #     c_x = self.waypoints[0]
-        #     c_y = self.waypoints[1]
-        #     plt.plot(c_x, c_y, "-r", label="course")
-        #     plt.plot(c_x[self.target_idx], c_y[self.target_idx], "xg", label="target")
-        
-        # if self.road_pts is not None:
-        #     H = self.coord_transform
-        #     H = np.array(H).reshape((3,3))
-        #     pts = np.concatenate((self.road_pts, np.ones((self.road_pts.shape[0],1))), axis=1)            
-        #     pts = np.array([np.matmul(v.T, H).T for v in pts])
-        #     plt.plot(pts[0:,0], pts[0:,1], ".k", label="course")
-
-        plt.plot(self.state.x, self.state.y, "-b", label="trajectory")
-
-        # plt.axis("equal")
-        # plt.grid(True)
-
-    
-
 
 def main(args=None):
     rclpy.init(args=args)

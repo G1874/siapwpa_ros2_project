@@ -6,6 +6,7 @@ import cv2
 import numpy as np
 from std_msgs.msg import Float32MultiArray
 
+
 class ImageSkeletonizerNode(Node):
     def __init__(self):
         super().__init__('road_skeletonizer')
@@ -20,7 +21,6 @@ class ImageSkeletonizerNode(Node):
         self.publisher_img = self.create_publisher(Image, '/road_viz', 10)
         self.bridge = CvBridge()
         
-
     def image_callback(self, msg):
         cv_image = self.bridge.imgmsg_to_cv2(msg, desired_encoding='mono8')
         points = cv2.findNonZero(cv_image)
@@ -51,8 +51,8 @@ class ImageSkeletonizerNode(Node):
         self.publisher_pts.publish(points)
         processed_msg = self.bridge.cv2_to_imgmsg(output_image, encoding='bgr8')
         
-
         self.publisher_img.publish(processed_msg)
+
 
 def main(args=None):
     rclpy.init(args=args)

@@ -1,4 +1,3 @@
-# Można spróbować jechać w drugą stronę, żeby nie było od razu widać wykrywania okien
 import rclpy
 from rclpy.node import Node
 from sensor_msgs.msg import Image

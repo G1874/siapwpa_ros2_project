@@ -31,14 +31,7 @@ def generate_launch_description():
         name="image_binarizer",
         output="screen",
     )
-
-    bin_slider = Node(
-        package='autonomous_vehicle',
-        executable="binarization_slider",
-        name="binarization_slider",
-        output="screen",
-    )
-
+    
     motion_control_node = Node(
         package='autonomous_vehicle',
         executable='motion_control',
@@ -60,45 +53,12 @@ def generate_launch_description():
         output="screen",
     )
 
-    color_slider = Node(
-        package='autonomous_vehicle',
-        executable="color_slider",
-        name="color_slider",
-        output="screen",
-    )
-
-    # road_detector = Node(
-    #     package='autonomous_vehicle',
-    #     executable="road_detector",
-    #     name="road_detector",
-    #     output="screen",
-    # )
-
-    pedestrians = Node(
-        package='autonomous_vehicle',
-        executable="pedestrians",
-        name="pedestrians",
-        output="screen",
-    )
-
-    terrible_motion_control = Node(
-        package='autonomous_vehicle',
-        executable="terrible_motion_control",
-        name="terrible_motion_control",
-        output="screen",
-    )
-
     return LaunchDescription([
         gz_sim_world,
         gz_bridge,
         warp_perspective_node,
         image_binarizer,
         motion_control_node,
-        # bin_slider,
         image_skeletonizer,
-        # color_slider,
         recognition
-        # road_detector,
-        # pedestrians,
-        # terrible_motion_control
     ])
