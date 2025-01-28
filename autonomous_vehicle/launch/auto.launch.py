@@ -4,13 +4,18 @@ from launch_ros.actions import Node
 
 
 def generate_launch_description():
+    # Define the path to the custom world file for the Gazebo simulation.
     world_path = "/home/developer/ros2_ws/src/worlds/custom_city/custom_city.sdf"
+    
+    # Define the path to the YAML configuration file for the ros_gz_bridge.
     gz_bridge_path = "/home/developer/ros2_ws/src/ros_gz_bridge.yaml"
 
+    # Launch the Gazebo simulation with the custom world.
     gz_sim_world = ExecuteProcess(
         cmd=["gz", "sim", world_path, "-r"]
     )
 
+    # Launch the ROS-Gazebo bridge with the provided configuration file.
     gz_bridge = ExecuteProcess(
         cmd=[
             "ros2", "run", "ros_gz_bridge", "parameter_bridge",
@@ -18,6 +23,7 @@ def generate_launch_description():
         ]
     )
 
+    # Launch the warp perspective node for transforming coordinates.
     warp_perspective_node = Node(
         package='autonomous_vehicle',
         executable='warp_perspective',
@@ -25,6 +31,7 @@ def generate_launch_description():
         output="screen"
     )
 
+    # Launch the image binarizer node for preprocessing images.
     image_binarizer = Node(
         package='autonomous_vehicle',
         executable="image_binarizer",
@@ -32,6 +39,7 @@ def generate_launch_description():
         output="screen",
     )
     
+    # Launch the motion control node for controlling the vehicle's motion.
     motion_control_node = Node(
         package='autonomous_vehicle',
         executable='motion_control',
@@ -39,6 +47,7 @@ def generate_launch_description():
         output="screen"
     )
 
+    # Launch the image skeletonizer node for extracting line skeletons from images.
     image_skeletonizer = Node(
         package='autonomous_vehicle',
         executable="image_skeletonizer",
@@ -46,6 +55,7 @@ def generate_launch_description():
         output="screen",
     )
 
+    # Launch the recognition node for detecting and recognizing objects or signs.
     recognition = Node( 
         package='autonomous_vehicle',
         executable="Recognizing",
@@ -53,12 +63,13 @@ def generate_launch_description():
         output="screen",
     )
 
+    # Return the launch description, which includes all the processes to be executed.
     return LaunchDescription([
-        gz_sim_world,
-        gz_bridge,
-        warp_perspective_node,
-        image_binarizer,
-        motion_control_node,
-        image_skeletonizer,
-        recognition
+        gz_sim_world,              # Start Gazebo simulation.
+        gz_bridge,                 # Start ROS-Gazebo bridge for communication.
+        warp_perspective_node,     # Start warp perspective node for coordinate transformation.
+        image_binarizer,           # Start image binarizer for preprocessing.
+        motion_control_node,       # Start motion control node to control vehicle.
+        image_skeletonizer,        # Start image skeletonizer to process road points.
+        recognition                # Start recognition node to detect signs or objects.
     ])
