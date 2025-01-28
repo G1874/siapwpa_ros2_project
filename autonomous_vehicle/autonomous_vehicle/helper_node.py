@@ -6,6 +6,11 @@ import cv2
 import numpy as np
 
 
+#
+# Node used for displaying topics and initial calibration.
+#
+
+
 def find_green_marker(img):
     green_tresh_hi = np.array([50, 255, 50])
     green_tresh_lo = np.array([0, 100, 0])
@@ -76,7 +81,8 @@ class HelperNode(Node):
         self.road_viz_sub = self.create_subscription(Image, self.road_viz_topic, self.display_road_vis, 10)
         self.sign_image_sub = self.create_subscription(Image, self.sign_image_topic, self.display_sign_img, 10)
 
-    def proces_image(self, msg):
+    # Method used during calibration of the perspective warp.
+    def calibrate_warp(self, msg):
         img = self.bridge.imgmsg_to_cv2(msg, desired_encoding='bgr8')
 
         w, h = (800, 800)
@@ -88,13 +94,6 @@ class HelperNode(Node):
             [706,519],
             [533,438]
         ])
-
-        # model_pts = np.float32([
-        #     [300,500],
-        #     [300,700],
-        #     [500,700],
-        #     [500,500]
-        # ])
 
         model_pts = np.float32([
             [0,0],
@@ -144,15 +143,6 @@ class HelperNode(Node):
     def display_image_birdseye(self, msg):
         self.birdseye_image = self.bridge.imgmsg_to_cv2(msg, desired_encoding='bgr8')
         
-        # for i in range(0, 4):
-        #     cv2.circle(cv_image, (int(model_pts[i,0]), int(model_pts[i,1])), 3, (0,0,0), -1)
-
-        # for i in range(0, 4):
-        #     j = (i + 1)
-        #     if i == 3 : j = 0
-        #     cv2.line(cv_image, (int(model_pts[i,0]),int(model_pts[i,1])),
-        #              (int(model_pts[j,0]),int(model_pts[j,1])), (0,0,0), 2)
-
         disp_image = self.birdseye_image
         disp_image[self.road_vis_image != 0] = 0
         self.road_vis_image = np.zeros((800, 800))

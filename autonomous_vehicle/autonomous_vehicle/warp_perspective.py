@@ -42,6 +42,7 @@ class PerspectiveWarpNode(Node):
 
     def image_callback(self, msg):
         """ Callback to process the image and warp perspective. """
+
         try:
             # Convert ROS Image message to OpenCV format
             cv_image = self.bridge.imgmsg_to_cv2(msg, desired_encoding='bgr8')
@@ -59,8 +60,11 @@ class PerspectiveWarpNode(Node):
             self.get_logger().error(f"Error warping or publishing image: {e}")
 
     def update_perspective(self, img):
+        ''' Update perspective using cv2.warpPerspective '''
+
         w, h = (self.w, self.h)
 
+        # Precalculated points of the image.
         img_pts = np.float32([
             [265,438],
             [92,519],
@@ -70,6 +74,7 @@ class PerspectiveWarpNode(Node):
 
         sf = self.scale_factor
 
+        # Precalculated points in the world coordinates.
         model_pts = np.float32([
             [0,0],
             [0,6],
