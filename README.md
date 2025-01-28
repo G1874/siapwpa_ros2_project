@@ -4,8 +4,8 @@
 ## Spis treści
 1. [Opis projektu](#opis-projektu)
 2. [Przygotowanie środowiska symulacyjnego](#przygotowanie-środowiska-symulacyjnego)
-3. [Implementacja algorytmu sterowania](#implementacja-algorytmu-sterowania)
-4. [Algorytm detekcji znaków](#algorytm-detekcji-znaków)
+3. [Algorytm detekcji znaków](#algorytm-detekcji-znaków)
+4. [Implementacja algorytmu sterowania](#implementacja-algorytmu-sterowania) 
 5. [Uruchomienie](#uruchomienie)
 6. [Przydatne komendy / informacje](#przydatne-komendy--informacje)
 
@@ -108,7 +108,64 @@ Ważnym elementem jest podanie poprawnej ścieżki do mapy punktów modelu okre�
 ```
 Model samochodu nie został w żaden sposób zmodyfikowany, tylko wczytany wprost z pliku wraz z określeniem miejsca, w którym ma się pojawiać na mapie względem centrum.
 
+## Algorytm detekcji znaków
+Algorytm detekcji znaków drogowych został zaprojektowany w celu identyfikacji znaków na obrazie z kamery przedniej pojazdu. Proces obejmuje wykrywanie obszarów z potencjalnymi znakami drogowymi, klasyfikację ich na odpowiednie kategorie oraz przekazywanie wyników w czasie rzeczywistym.
+
+Przed analizą obraz jest konwertowany z formatu ROS na format zgodny z OpenCV przy użyciu biblioteki cv_bridge:
+
+```bash
+frame = self.bridge.imgmsg_to_cv2(msg, desired_encoding="bgr8")
+```
+
+Zidentyfikowane obszary są klasyfikowane przy użyciu wczytanego, wcześniej wytrenowanego modelu sieci neuronowej:
+
+```bash
+self.model = tf.saved_model.load(
+    "/home/developer/ros2_ws/src/autonomous_vehicle/autonomous_vehicle/good_model")
+```
+
+Przed klasyfikacją, fragment obrazu jest przetwarzany:
+
+- Skalowanie do wymiaru 30x30 pikseli.
+- Normalizacja wartości pikseli do zakresu [0, 1].
+- Dodanie wymiaru dla batcha.
+
+Model zwraca etykietę oraz poziom pewności:
+
+```bash
+output = self.model.signatures["serving_default"](input_tensor)
+predictions = output["output_0"].numpy()
+pred = np.argmax(predictions, axis=1)[0]
+confidence = np.max(predictions)
+```
+
+Dopasowana etykieta jest pobierana z predefiniowanego słownika:
+
+```bash
+sign = self.class_labels[pred + 1]
+```
+
 ## Implementacja algorytmu sterowania
+Przed implementacją algorytmu odbywa się wstępne przetwarzanie obrazu z kamery samochodu. Zostaje on zbinaryzowany w celu wykrycia pasów jezdni.
+
+```bash
+hsv_image = cv2.cvtColor(cv_image, cv2.COLOR_BGR2HSV)
+lower_yellow = np.array([20, 100, 100], dtype=np.uint8)
+upper_yellow = np.array([30, 255, 255], dtype=np.uint8)
+yellow_mask = cv2.inRange(hsv_image, lower_yellow, upper_yellow)
+```
+Wynikiem jest maska binarna, gdzie piksele odpowiadające żółtemu kolorowi przyjmują wartość 255.
+Algorytm identyfikuje połączone komponenty na masce binarnej i filtruje je na podstawie ich wielkości. Tylko obszary o rozmiarze pomiędzy area_min a area_max zostają zachowane:
+
+```bash
+num_labels, labels, stats, _ = cv2.connectedComponentsWithStats(yellow_mask, connectivity=8)
+filtered_mask = np.zeros_like(yellow_mask)
+for label in range(1, num_labels): 
+    area = stats[label, cv2.CC_STAT_AREA]
+    if self.area_min <= area <= self.area_max:
+        filtered_mask[labels == label] = 255
+```
+
 W projekcie do sterowania pojazdem wykorzystano kontroler Stanleya. Jest to jeden z popularnych algorytmów używanych do sterowania autonomicznymi pojazdami. Jego głównym celem jest minimalizacja odchylenia pojazdu od zaplanowanej trajektorii oraz utrzymanie poprawnej orientacji pojazdu względem tej trajektorii.
 
 ![Schemat określający najważniejsze zmienne dla kontrolera Stanleya](images/stanley.png)
@@ -152,43 +209,6 @@ self.target_idx, _ = calc_target_index(self.state, c_x, c_y)
 self.state.x = 0.0
 self.state.y = 0.0
 self.state.yaw = 0.0
-```
-
-## Algorytm detekcji znaków
-Algorytm detekcji znaków drogowych został zaprojektowany w celu identyfikacji znaków na obrazie z kamery przedniej pojazdu. Proces obejmuje wykrywanie obszarów z potencjalnymi znakami drogowymi, klasyfikację ich na odpowiednie kategorie oraz przekazywanie wyników w czasie rzeczywistym.
-
-Przed analizą obraz jest konwertowany z formatu ROS na format zgodny z OpenCV przy użyciu biblioteki cv_bridge:
-
-```bash
-frame = self.bridge.imgmsg_to_cv2(msg, desired_encoding="bgr8")
-```
-
-Zidentyfikowane obszary są klasyfikowane przy użyciu wczytanego, wcześniej wytrenowanego modelu sieci neuronowej:
-
-```bash
-self.model = tf.saved_model.load(
-    "/home/developer/ros2_ws/src/autonomous_vehicle/autonomous_vehicle/good_model")
-```
-
-Przed klasyfikacją, fragment obrazu jest przetwarzany:
-
-- Skalowanie do wymiaru 30x30 pikseli.
-- Normalizacja wartości pikseli do zakresu [0, 1].
-- Dodanie wymiaru dla batcha.
-
-Model zwraca etykietę oraz poziom pewności:
-
-```bash
-output = self.model.signatures["serving_default"](input_tensor)
-predictions = output["output_0"].numpy()
-pred = np.argmax(predictions, axis=1)[0]
-confidence = np.max(predictions)
-```
-
-Dopasowana etykieta jest pobierana z predefiniowanego słownika:
-
-```bash
-sign = self.class_labels[pred + 1]
 ```
 
 ## Uruchomienie
