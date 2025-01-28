@@ -10,10 +10,10 @@
 6. [Przydatne komendy / informacje](#przydatne-komendy--informacje)
 
 ## Opis projektu
-Projekt miał na celu zaprojektowanie i implementację autonomicznego samochodu działającego w środowisku symulacyjnym ROS + Gazebo. W ramach projektu stworzono system umożliwiający pojazdowi samodzielne poruszanie się po drodze, wykrywając i interpretując elementy otoczenia na podstawie obrazu z kamery. Algorytm analizuje obraz z kamery zamontowanej na samochodzie, aby wykrywać linię na środku jezdni. Na tej podstawie samochód dynamicznie wyznacza trajektorię ruchu, utrzymując się w granicach wyznaczonego pasa. Detekcja znaków drogowych odbywała się za pomocą wytrenowanej wcześniej sieci neuronowej, dzięki czemu system jest w stanie rozpoznać różne znaki, takie jak ograniczenia prędkości, znaki stopu czy ostrzeżenia.
+Projekt miał na celu zaprojektowanie i implementację autonomicznego samochodu działającego w środowisku symulacyjnym ROS + Gazebo. W ramach projektu stworzono system umożliwiający pojazdowi samodzielne poruszanie się po drodze, wykrywając i interpretując elementy otoczenia na podstawie obrazu z kamery. Algorytm analizuje obraz z kamery zamontowanej na samochodzie, aby wykrywać linię na środku jezdni. Na tej podstawie samochód dynamicznie wyznacza trajektorię ruchu, utrzymując się w granicach wyznaczonego pasa. Detekcja znaków drogowych odbywała się za pomocą klasycznych metod następnie wytrenowana wcześniej sieć neuronowa odpowiadała za ich klasyfikacje, dzięki czemu system jest w stanie rozpoznać różne znaki, takie jak ograniczenia prędkości, znaki stopu czy ostrzeżenia.
 
 ## Przygotowanie środowiska symulacyjnego
-W projekcie zostały wykorzystane projekty gotowy znaleziony w internecie:
+W projekcie zostały wykorzystane następujące projekty znalezione w internecie:
 
 - [Nathan Benson Park](https://app.gazebosim.org/OpenRobotics/fuel/models/nathan_benderson_park) - Gotowy świat zawierający układ miasta z drogami z teskturami pasów.
 
@@ -99,14 +99,14 @@ Znaki są wczytywane w ten sam sposób jak mapa oraz zmienione, tak aby miały r
   </model> 
 </sdf> 
 ```
-Ważnym elementem jest podanie poprawnej ścieżki do mapy punktów modelu określonym w sekcji <uri> i podanie niej odpowiedniej grafiki:
+Ważnym elementem jest podanie poprawnej ścieżki do mapy punktów modelu określonym w sekcji <uri> i dodanie do niej odpowiedniej grafiki:
 
 ```bash
 <image id="Speed_30_tga">
       <init_from>../materials/textures/priority.png</init_from>
 </image> 
 ```
-Model samochodu nie został w żaden sposób zmodyfikowany, tylko wczytany wprost z pliku wraz z określeniem miejsca, w którym ma się pojawiać na mapie względem centrum.
+Do modelu samochodu z kontrolerem ackerman'a dodano czujniki.
 
 ## Algorytm detekcji znaków
 Algorytm detekcji znaków drogowych został zaprojektowany w celu identyfikacji znaków na obrazie z kamery przedniej pojazdu. Proces obejmuje wykrywanie obszarów z potencjalnymi znakami drogowymi, klasyfikację ich na odpowiednie kategorie oraz przekazywanie wyników w czasie rzeczywistym.
@@ -170,7 +170,7 @@ W projekcie do sterowania pojazdem wykorzystano kontroler Stanleya. Jest to jede
 
 ![Schemat określający najważniejsze zmienne dla kontrolera Stanleya](images/stanley.png)
 
-Kontroler Stanley został zaimplementowany jako część funkcji motion_controller. Algorytm wykorzystuje bieżący stan pojazdu oraz punkty trajektorii do obliczenia kąta skrętu i wysyłania odpowiednich komend prędkości do pojazdu.
+Kontroler Stanley został zaimplementowany jako część node'a motion_controller. Algorytm wykorzystuje bieżący stan pojazdu oraz punkty trajektorii do obliczenia kąta skrętu i wysyłania odpowiednich komend prędkości do pojazdu.
 
 ```bash
 def motion_controller(self, waypoints=None, target_vel=0.0):
@@ -195,7 +195,7 @@ def motion_controller(self, waypoints=None, target_vel=0.0):
 
 Kluczowe kroki:
 - Obliczenie kąta skrętu 𝛿: Funkcja stanley_control wyznacza kąt skrętu na podstawie bieżącego stanu pojazdu oraz trajektorii.
-- Wyznaczenie prędkości kątowej: Prędkość kątowa 𝜓' jest zależna od prędkości liniowej pojazdu 𝑣 oraz promienia skrętu.
+- Wyznaczenie prędkości kątowej: Prędkość kątowa 𝜓' jest zależna od prędkości liniowej pojazdu 𝑣 oraz promienia skrętu który wyznaczany jest z obliczonego wcześniej kąta skrętu.
 - Publikacja komend: Komendy prędkości liniowej i kątowej są wysyłane do napędu pojazdu za pomocą ROS /cmd_vel.
 
 Trajektoria jest interpolowana za pomocą funkcji calc_spline_course z biblioteki cubic_spline_planner. Algorytm generuje punkty trajektorii oraz odpowiadające im kąty orientacji:
